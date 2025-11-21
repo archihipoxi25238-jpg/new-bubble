@@ -18,6 +18,9 @@ class Bubble:
     created_at: str
     resources: List[Dict[str, str]] = field(default_factory=list)
 
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Bubble":
         return cls(
