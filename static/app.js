@@ -3,45 +3,12 @@ const listEl = document.getElementById('bubble-list');
 const emptyEl = document.getElementById('empty');
 const createForm = document.getElementById('create-form');
 const refreshBtn = document.getElementById('refresh');
-const statusEl = document.getElementById('status');
 const template = document.getElementById('bubble-template');
-let backendReady = false;
 
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2200);
-}
-
-function setStatus(message, type = 'info') {
-  statusEl.textContent = message;
-  statusEl.classList.remove('hidden');
-  if (type === 'error') {
-    statusEl.classList.add('error');
-  } else {
-    statusEl.classList.remove('error');
-  }
-}
-
-function toggleInteractivity(enabled) {
-  backendReady = enabled;
-  const createBtn = createForm.querySelector('button[type="submit"]');
-  const inputs = createForm.querySelectorAll('input, textarea');
-  const toggle = (nodeList, disabled) => nodeList.forEach((node) => { node.disabled = disabled; });
-
-  toggle([createBtn], !enabled);
-  toggle(inputs, !enabled);
-  refreshBtn.disabled = !enabled;
-
-  document
-    .querySelectorAll('.fetch-form button, .fetch-form input[name="query"]')
-    .forEach((el) => { el.disabled = !enabled; });
-}
-
-function clearStatus() {
-  statusEl.textContent = '';
-  statusEl.classList.add('hidden');
-  statusEl.classList.remove('error');
 }
 
 function renderResources(container, resources) {
@@ -77,10 +44,6 @@ function renderBubbles(data) {
     renderResources(resourcesEl, bubble.resources);
 
     const fetchForm = card.querySelector('.fetch-form');
-    const fetchButton = fetchForm.querySelector('button');
-    const fetchInput = fetchForm.querySelector('input[name="query"]');
-    fetchButton.disabled = !backendReady;
-    fetchInput.disabled = !backendReady;
     fetchForm.addEventListener('submit', async (ev) => {
       ev.preventDefault();
       const query = fetchForm.querySelector('input[name="query"]').value.trim();
@@ -110,18 +73,9 @@ function renderBubbles(data) {
 async function fetchBubbles() {
   try {
     const res = await fetch('/api/bubbles');
-    if (!res.ok) {
-      throw new Error(`后端返回 ${res.status}，请确认服务已启动`);
-    }
     const data = await res.json();
     renderBubbles(data);
-    setStatus(`已连接后端，当前 Bubble 数：${data.bubbles?.length ?? 0}`);
-    toggleInteractivity(true);
   } catch (err) {
-    renderBubbles({ bubbles: [] });
-    emptyEl.style.display = 'block';
-    setStatus(err.message || '无法连接后端，请确认服务已启动。', 'error');
-    toggleInteractivity(false);
     showToast('加载失败，请稍后重试');
   }
 }

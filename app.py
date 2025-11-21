@@ -22,13 +22,6 @@ def _serialize_bubbles() -> Dict[str, Any]:
     return {"bubbles": [bubble.to_dict() for bubble in manager.bubbles]}
 
 
-@app.route("/api/health", methods=["GET"])
-def health() -> Any:
-    """轻量化健康检查，便于前端识别后端是否在线。"""
-
-    return jsonify({"status": "ok", "count": len(manager.bubbles)})
-
-
 @app.route("/api/bubbles", methods=["GET", "POST"])
 def bubbles() -> Any:
     if request.method == "GET":
