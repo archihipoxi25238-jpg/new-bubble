@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bubble 实验室</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Bubble 实验室</p>
+      <h1>记录你的想法，搜集灵感。</h1>
+      <p class="subtitle">创建一个 Bubble 输入想法，随时追加线上资料。</p>
+    </div>
+    <div class="badge">可视化界面</div>
+  </header>
+
+  <div id="status" class="status hidden" role="status"></div>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>创建新 Bubble</h2>
+      <form id="create-form" class="form">
+        <label>
+          标题
+          <input name="title" placeholder="例如：AI 辅助写作" required />
+        </label>
+        <label>
+          想法描述
+          <textarea name="idea" rows="3" placeholder="简要描述你的想法" required></textarea>
+        </label>
+        <button type="submit">创建 Bubble</button>
+      </form>
+      <p class="hint">保存后会自动显示在下方列表。</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>你的 Bubbles</h2>
+        <button id="refresh">刷新</button>
+      </div>
+      <div id="bubble-list" class="bubble-list"></div>
+      <div id="empty" class="empty">还没有 Bubble，先创建一个吧。</div>
+    </section>
+  </main>
+
+  <template id="bubble-template">
+    <article class="bubble-card">
+      <div class="bubble-header">
+        <div>
+          <p class="bubble-id"></p>
+          <h3 class="bubble-title"></h3>
+          <p class="bubble-date"></p>
+        </div>
+      </div>
+      <p class="bubble-idea"></p>
+      <div class="resources"></div>
+      <form class="fetch-form">
+        <label>
+          搜索更多资料
+          <input name="query" placeholder="输入关键词" required />
+        </label>
+        <button type="submit">获取网上资讯</button>
+      </form>
+    </article>
+  </template>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
